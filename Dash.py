@@ -786,7 +786,7 @@ class LoiFinanceDashboard:
                     <li>Renforcer les mesures de maîtrise des dépenses</li>
                     <li>Protéger les investissements essentiels</li>
                     <li>Préparer des plans de contingence</li>
-                    <li>Communicer sur la stratégie de sortie de crise</li>
+                    <li>Communiquer sur la stratégie de sortie de crise</li>
                 </ul>
             </div>
             """, unsafe_allow_html=True)
@@ -810,9 +810,13 @@ class LoiFinanceDashboard:
         
         # Export des données
         st.sidebar.markdown("### 📥 EXPORT")
+        
+        # Récupérer le scénario actuel depuis session_state
+        current_scenario = st.session_state.scenario_selected
+        
         if st.sidebar.button("Exporter les données en CSV"):
             # Génération du CSV
-            projections = generate_projections(self.budget_data, self.inflation_data, st.session_state.scenario_selected)
+            projections = generate_projections(self.budget_data, self.inflation_data, current_scenario)
             projections_df = pd.DataFrame({
                 'Année': projections['annees'],
                 'Recettes (Md€)': projections['recettes'],
@@ -824,7 +828,7 @@ class LoiFinanceDashboard:
             st.sidebar.download_button(
                 label="Télécharger CSV",
                 data=csv,
-                file_name=f"budget_projections_{scenario}_{datetime.now().strftime('%Y%m%d')}.csv",
+                file_name=f"budget_projections_{current_scenario}_{datetime.now().strftime('%Y%m%d')}.csv",
                 mime="text/csv"
             )
         
